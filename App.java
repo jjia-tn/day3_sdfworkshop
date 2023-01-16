@@ -55,6 +55,7 @@ public final class App {
                     listCart(cartItems);
                     break;
                 case "users":
+                    listUsers(dirPath);
                     break;
                 default:
             }
@@ -81,6 +82,15 @@ public final class App {
 
         }
 
+    }
+
+    public static void listUsers(String dirPath) {
+        File directoryPath = new File(dirPath);
+
+        String contents[] = directoryPath.list();
+        for (String file : contents) {
+            displayMessage(file);
+        }
     }
 
     public static void createLoginFile(String input, String dirPath, String fileName) throws IOException {
