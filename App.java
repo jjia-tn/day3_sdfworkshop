@@ -1,7 +1,10 @@
 package sg.edu.nus.iss;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.Console;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -54,6 +57,7 @@ public final class App {
                     displayMessage("'quit' to exit the program");
                     break;
                 case "list":
+                    cartItems = readCartItemsFromFile(dirPath, fileName);
                     listCart(cartItems);
                     break;
                 case "users":
@@ -144,6 +148,38 @@ public final class App {
 
         return cartItems;
 
+    }
+
+    public static void updateCartItemToFile(List<String> cartItems, String dirPath, String fileName) throws IOException {
+        FileWriter fw = new FileWriter(dirPath + File.separator + fileName, false);
+        BufferedWriter bw = new BufferedWriter(fw);
+
+        int listCount = 0;
+        while (listCount < cartItems.size()) {
+            bw.write(cartItems.get(listCount));
+            bw.newLine();
+            listCount++;
+        }
+        bw.flush();
+        fw.flush();
+        bw.close();
+        fw.close();
+    }
+
+    public static List<String> readCartItemsFromFile(String dirPath, String fileName) throws IOException {
+        List<String> items = new ArrayList<String>();
+
+        File file = new File(dirPath + File.separator + fileName);
+
+        // Create BufferedReader object
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        String sr;
+        while ((sr = br.readLine()) != null) {
+            items.add(sr);
+        }
+        br.close();
+
+        return items;
     }
 
     public static void listCart(List<String> cartItems) {
