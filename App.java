@@ -2,7 +2,9 @@ package sg.edu.nus.iss;
 
 import java.io.Console;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -61,7 +63,7 @@ public final class App {
             }
 
             if (input.startsWith("login")) {
-                createLoginFile(input, dirPath, fileName);
+                fileName = createLoginFile(input, dirPath, fileName);
             }
 
             String strValue = "";
@@ -70,10 +72,20 @@ public final class App {
 
                 Scanner scanner = new Scanner(input.substring(4));
 
+                FileWriter fw = new FileWriter(dirPath + File.separator + fileName);
+                PrintWriter pw = new PrintWriter(fw);
+
                 while (scanner.hasNext()) {
                     strValue = scanner.next();
                     cartItems.add(strValue);
+
+                    pw.printf("%s\n", strValue);
                 }
+
+                pw.flush();
+                fw.flush();
+                pw.close();
+                fw.close();
             }
 
             if (input.startsWith("delete")) {
@@ -93,7 +105,7 @@ public final class App {
         }
     }
 
-    public static void createLoginFile(String input, String dirPath, String fileName) throws IOException {
+    public static String createLoginFile(String input, String dirPath, String fileName) throws IOException {
         input = input.replace(',', ' ');
 
         // String strLogin = "";
@@ -112,6 +124,7 @@ public final class App {
         } else {
             displayMessage("File already created");
         }
+        return fileName;
     }
 
     public static List<String> deleteCartItem(List<String> cartItems, String input) {
